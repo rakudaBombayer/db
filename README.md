@@ -200,7 +200,22 @@ HAVING
         SELECT 
             MAX(avg_views)                                           -- 各ジャンルで平均視聴数が最も高い番組を取得
         FROM (
-  
+            SELECT 
+                genre.genre_id,
+                program.program_id,
+                AVG(viewing_history.views) AS avg_views
+            FROM 
+                program
+            JOIN 
+                viewing_history ON program.viewing_history_id = viewing_history.viewing_history_id
+            GROUP BY 
+                genre.genre_id, program.program_id
+        ) AS genre_avg
+        WHERE 
+            genre_avg.genre_id = genre.genre_id
+    )
+ORDER BY 
+    genre_name;                                                      -- ジャンル名で並べ替え
 `
 
 
