@@ -72,5 +72,11 @@ channel
 | channel_id   | BIGINT(20)   | PRIMARY KEY                    |
 | channel_name | VARCHAR(100) | NOT NULL                       |
 
+#ER図
+![ER_QUEST](https://github.com/user-attachments/assets/a96fe261-7ce7-4364-a626-2620c869d6c3)
+
+draw.ioのリンク↓
+https://drive.google.com/file/d/1LEU9MSpNpDYNFvuVYlRqTAbGTkaKZYU6/view?usp=sharing
+
 
 
