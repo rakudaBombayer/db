@@ -76,11 +76,11 @@ channel
 ![ER_QUEST](https://github.com/user-attachments/assets/a96fe261-7ce7-4364-a626-2620c869d6c3)
 
 
-draw.ioのリンク↓
+draw.ioのリンク↓  
 https://drive.google.com/file/d/1LEU9MSpNpDYNFvuVYlRqTAbGTkaKZYU6/view?usp=sharing
 
-1
-`
+1  
+```
 SELECT 
     episodes.episode_title,
     viewing_history.views
@@ -91,9 +91,9 @@ JOIN
 ORDER BY 
     viewing_history.views DESC
 LIMIT 3;
-`
-2
-`
+```
+2  
+```
 SELECT 
     program.title AS program_title,           -- 番組タイトル
     seasons.seasons AS season_number,         -- シーズン数
@@ -111,9 +111,9 @@ JOIN
 ORDER BY 
     viewing_history.views DESC
 LIMIT 3;
-`
-3
-`
+```
+3  
+```
 SELECT 
     channel.channel_name AS channel_name,                                      -- チャンネル名
     program.starttime AS broadcast_start_time,                                 -- 放送開始時刻（日付+時間）
@@ -134,10 +134,10 @@ WHERE
     DATE(program.starttime) = CURDATE()                                        -- 本日放送される条件
 ORDER BY 
     broadcast_start_time;                                                      -- 放送開始時刻で並べ替え
-`
+```
 
-4
-`
+4  
+```
 SELECT 
     program.starttime AS broadcast_start_time,                                 -- 放送開始時刻（日付+時間）
     program.endtime AS broadcast_end_time,                                     -- 放送終了時刻
@@ -154,14 +154,14 @@ JOIN
 JOIN 
     channel ON program.channel_id = channel.channel_id                         -- チャンネル情報を結合
 WHERE 
-    channel.channel_name = 'ドラマ'                                           -- ドラマチャンネルを指定
+    channel.channel_name = 'ドラマチャンネル'                                           -- ドラマチャンネルを指定
     AND DATE(program.starttime) BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 7 DAY)  -- 本日から一週間分
 ORDER BY 
     broadcast_start_time;                                                      -- 放送開始時刻で並べ替え
-`
+```
 
-5
-`
+5  
+```
 SELECT 
     program.title AS program_title,                               -- 番組タイトル
     SUM(viewing_history.views) AS total_views                     -- エピソード視聴数の合計
@@ -178,9 +178,9 @@ GROUP BY
 ORDER BY 
     total_views DESC                                              -- 視聴数合計で降順に並べ替え
 LIMIT 2;                                                          -- トップ2の番組を取得
-`
-6
-`
+```
+6  
+```
 SELECT 
     genre.genre_name AS genre_name,                                  -- ジャンル名
     program.title AS program_title,                                  -- 番組タイトル
@@ -216,6 +216,6 @@ HAVING
     )
 ORDER BY 
     genre_name;                                                      -- ジャンル名で並べ替え
-`
+```
 
 
