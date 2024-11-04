@@ -72,12 +72,49 @@ channel
 | channel_id   | BIGINT(20)   | PRIMARY KEY                    |
 | channel_name | VARCHAR(100) | NOT NULL                       |
 
-#ER図
+# ER図
 ![ER_QUEST](https://github.com/user-attachments/assets/a96fe261-7ce7-4364-a626-2620c869d6c3)
 
 
 draw.ioのリンク↓  
 https://drive.google.com/file/d/1LEU9MSpNpDYNFvuVYlRqTAbGTkaKZYU6/view?usp=sharing
+
+
+# テーブルを構築する
+
+#データベースにログイン#  
+```
+mysql -u root -p
+```
+
+#データベースを作る#
+```
+CREATE DATABASE データベース名;
+```
+
+#作ったデータベースを使う#
+```
+CREATE DATABASE データベース名;
+```
+
+#データベースにテーブルをつくる#
+```
+source /ファイルのパス/db_quest.sql
+```
+#外部キーを設定して連結させる#
+```
+source /ファイルのパス/alter_FK.sql
+```
+
+#サンプルデータを入れる#
+```
+source /ファイルのパス/add_data.sql
+```
+
+
+# 下記のsql文を試していく
+
+#よく見られているエピソードを知りたいです。エピソード視聴数トップ3のエピソードタイトルと視聴数を取得してください#
 
 1  
 ```
@@ -92,6 +129,9 @@ ORDER BY
     viewing_history.views DESC
 LIMIT 3;
 ```
+
+#よく見られているエピソードの番組情報やシーズン情報も合わせて知りたいです。エピソード視聴数トップ3の番組タイトル、シーズン数、エピソード数、エピソードタイトル、視聴数を取得してください#
+
 2  
 ```
 SELECT 
@@ -112,6 +152,9 @@ ORDER BY
     viewing_history.views DESC
 LIMIT 3;
 ```
+
+
+
 3  
 ```
 SELECT 
