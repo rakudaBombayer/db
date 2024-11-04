@@ -75,8 +75,132 @@ channel
 #ER図
 ![ER_QUEST](https://github.com/user-attachments/assets/a96fe261-7ce7-4364-a626-2620c869d6c3)
 
+
 draw.ioのリンク↓
 https://drive.google.com/file/d/1LEU9MSpNpDYNFvuVYlRqTAbGTkaKZYU6/view?usp=sharing
 
+1
+`
+SELECT 
+    episodes.episode_title,
+    viewing_history.views
+FROM 
+    viewing_history
+JOIN 
+    episodes ON viewing_history.episode_id = episodes.episode_id
+ORDER BY 
+    viewing_history.views DESC
+LIMIT 3;
+`
+2
+`
+SELECT 
+    program.title AS program_title,           -- 番組タイトル
+    seasons.seasons AS season_number,         -- シーズン数
+    episodes.episodes AS episode_number,      -- エピソード数
+    episodes.episode_title,                   -- エピソードタイトル
+    viewing_history.views                     -- 視聴数
+FROM 
+    viewing_history
+JOIN 
+    episodes ON viewing_history.episode_id = episodes.episode_id
+JOIN 
+    seasons ON episodes.season_id = seasons.season_id
+JOIN 
+    program ON seasons.season_id = program.season_id
+ORDER BY 
+    viewing_history.views DESC
+LIMIT 3;
+`
+3
+`
+SELECT 
+    channel.channel_name AS channel_name,                                      -- チャンネル名
+    program.starttime AS broadcast_start_time,                                 -- 放送開始時刻（日付+時間）
+    program.endtime AS broadcast_end_time,                                     -- 放送終了時刻
+    seasons.seasons AS season_number,                                          -- シーズン数
+    episodes.episodes AS episode_number,                                       -- エピソード数
+    episodes.episode_title,                                                    -- エピソードタイトル
+    episodes.episode_details                                                   -- エピソード詳細
+FROM 
+    program
+JOIN 
+    seasons ON program.season_id = seasons.season_id
+JOIN 
+    episodes ON episodes.season_id = seasons.season_id
+JOIN 
+    channel ON program.channel_id = channel.channel_id                         -- チャンネル情報を結合
+WHERE 
+    DATE(program.starttime) = CURDATE()                                        -- 本日放送される条件
+ORDER BY 
+    broadcast_start_time;                                                      -- 放送開始時刻で並べ替え
+`
+
+4
+`
+SELECT 
+    program.starttime AS broadcast_start_time,                                 -- 放送開始時刻（日付+時間）
+    program.endtime AS broadcast_end_time,                                     -- 放送終了時刻
+    seasons.seasons AS season_number,                                          -- シーズン数
+    episodes.episodes AS episode_number,                                       -- エピソード数
+    episodes.episode_title,                                                    -- エピソードタイトル
+    episodes.episode_details                                                   -- エピソード詳細
+FROM 
+    program
+JOIN 
+    seasons ON program.season_id = seasons.season_id
+JOIN 
+    episodes ON episodes.season_id = seasons.season_id
+JOIN 
+    channel ON program.channel_id = channel.channel_id                         -- チャンネル情報を結合
+WHERE 
+    channel.channel_name = 'ドラマ'                                           -- ドラマチャンネルを指定
+    AND DATE(program.starttime) BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 7 DAY)  -- 本日から一週間分
+ORDER BY 
+    broadcast_start_time;                                                      -- 放送開始時刻で並べ替え
+`
+
+5
+`
+SELECT 
+    program.title AS program_title,                               -- 番組タイトル
+    SUM(viewing_history.views) AS total_views                     -- エピソード視聴数の合計
+FROM 
+    program
+JOIN 
+    viewing_history ON program.viewing_history_id = viewing_history.viewing_history_id
+JOIN 
+    episodes ON viewing_history.episode_id = episodes.episode_id
+WHERE 
+    DATE(program.starttime) BETWEEN DATE_SUB(CURDATE(), INTERVAL 7 DAY) AND CURDATE()  -- 直近一週間の放送分
+GROUP BY 
+    program.title                                                 -- 番組ごとにグループ化
+ORDER BY 
+    total_views DESC                                              -- 視聴数合計で降順に並べ替え
+LIMIT 2;                                                          -- トップ2の番組を取得
+`
+6
+`
+SELECT 
+    genre.genre_name AS genre_name,                                  -- ジャンル名
+    program.title AS program_title,                                  -- 番組タイトル
+    AVG(viewing_history.views) AS average_views                      -- エピソードの平均視聴数
+FROM 
+    program
+JOIN 
+    genre ON program.genre_id = genre.genre_id                       -- ジャンル情報を結合
+JOIN 
+    viewing_history ON program.viewing_history_id = viewing_history.viewing_history_id
+JOIN 
+    episodes ON viewing_history.episode_id = episodes.episode_id
+GROUP BY 
+    genre.genre_id, program.program_id                               -- ジャンルと番組ごとにグループ化
+HAVING 
+    AVG(viewing_history.views) = (
+        SELECT 
+            MAX(avg_views)                                           -- 各ジャンルで平均視聴数が最も高い番組を取得
+        FROM (
+  
+`
 
 
